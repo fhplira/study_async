@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'header' %}
+
+    <link href="{% static 'users/css/register.css' %}" rel="stylesheet">
+    <link href="{% static 'flashcard/css/new_flashcard.css' %}" rel="stylesheet">
+    <link href="{% static 'flashcard/css/init_challenge.css' %}" rel="stylesheet">
+    <link href="{% static 'flashcard/css/challenge.css' %}" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+{% endblock 'header' %}
+
+
+{% block 'content' %}
+    
+    {% include "partials/header.html" %}
+    
+    <div class="container">
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md">
+                <h3 class="secondary-font" >Challenge initiated</h3>
+                <span class="badge-category">Programação</span>
+                <span class="badge-category" >Matemática</span>
+                <br>
+                <br>
+                <br>
+                {% for flashcard in challenge.flashcards.all %}
+                    <div class="box-new-flashcard {% if flashcard.answered %}op2{% endif %}">
+                        <div class="flashcard {{ flashcard.flashcard.css_difficulty }}">
+
+                            <div class="flashcard-category">
+                                {{flashcard.flashcard.category}}
+                            </div>
+                            <br>
+                            <br>
+                            <div class="flashcard-box-item" onclick="flip_card({{flashcard.id}})">
+                                <p class="flashcard-item">{{flashcard.flashcard.question}}</p>
+                            </div>
+
+                            {% if not flashcard.answered %}
+                                <div class="answer">
+                                    <a href="{% url 'answer_flashcard' flashcard.id %}?got_it_right=0&challenge_id={{ challenge.id }}"><i class='bx bxs-x-square red-icon'></i></a>
+                                    <a href="{% url 'answer_flashcard' flashcard.id %}?got_it_right=1&challenge_id={{ challenge.id }}"><i class='bx bxs-check-square green-icon' ></i></a>
+                                </div>
+                            {% else %}
+                                {% if flashcard.got_it_right %}
+                                    <span class="badge bg-success">Got it right</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Got it wrong</span>
+                                {% endif %}
+                            {% endif %} 
+                            
+                            
+                        </div>
+                        <div class="answer-flashcard" id="{{flashcard.id}}">
+                            {{flashcard.flashcard.answer}}
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                {% endfor %}
+
+            </div>
+            <div class="col-md">
+
+                <h3 class="secondary-font">Score</h3>
+                <p class="p-font">Hits: {{ hits }}</p>
+                <p class="p-font">Misses: {{ misses }}</p>
+                <p class="p-font">Not answered: {{ not_answered }}</p>
+                <br>
+                <a class="btn-register btn-challenge" href="{% url 'report' challenge.id %}">Detailed report</a>
+            </div>
+        </div>
+
+    </div>
+    
+    <script>
+    function flip_card(id) {
+        let card = document.getElementById(id.toString());
+
+        if (card.style.display === 'none' || card.style.display === ''){
+            return card.style.display = 'block'
+        }else{
+        return card.style.display = 'none'
+        }
+    }
+    </script>
+
+{% endblock 'content' %}

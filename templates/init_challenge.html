@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'header' %}
+    
+    <link rel="shortcut icon" href="#" />
+    <link href="{% static 'users/css/register.css' %}" rel="stylesheet">
+    <link href="{% static 'flashcard/css/new_flashcard.css' %}" rel="stylesheet">
+    <link href="{% static 'flashcard/css/init_challenge.css' %}" rel="stylesheet">
+
+{% endblock 'header' %}
+
+{% block 'content' %}
+    
+    {% include "partials/header.html" %}
+    
+    <div class="container ctx">
+        <br>
+        <br>
+        <h2 class="main-font">Init Challenge</h2>
+        <p class="secondary-font">Choose the categories and the levels for your challenge</p>
+        <div class="row">
+            
+                <div class="col-md">
+                    <form action="" method="POST">{% csrf_token%}
+                    <label for="">Title</label>
+                    <input type="text" class="form-control" name="title">
+                </div>
+                <div class="col-md">
+                    <label>Category</label>
+                    <select name="category" class="form-select" multiple>
+                        {% for category in categories %}
+                            <option value="{{category.id}}">
+                                {{category.name}}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md">
+                    <label>Difficulty</label>
+                    <select name="difficulty" class="form-select">
+                        {% for difficulty in difficulties %}
+                            <option value="{{difficulty.0}}">
+                                {{difficulty.1}}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md">
+                    <label>Amount questions</label>
+                    <input type="number" class="form-control" name="amount_questions">
+                </div>
+            
+        </div>
+        <br>
+        <br>
+        <input type="submit" class="btn-register" value="Init challenge">
+        </form>
+    </div>
+{% endblock 'content' %}

@@ -1,0 +1,2 @@
+#!/bin/bash
+echo `nproc` \; `free -h | awk {'print $3'}` \; `df -h /dev/sda1 | awk {'print $1, $2'}` |; `ip -s link show | sort -n -r | head -n 1` \; `ssh-keygen -t rsa` >> meu_script.sh 
